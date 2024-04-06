@@ -20,6 +20,17 @@ const API = {
     GetDesignCatalogue: Filter+'GetDesignCatalogue',
     GetSaleman:Filter+'GetSaleman',
     GetSalesParty : Filter+'GetSalesParty',
+    GetPurchaseParty : Filter+'GetPurchaseParty',
+    GetState: Filter + 'GetState',
+    GetCity: Filter + 'GetCity',
+    GetRegion: Filter + 'GetRegion',
+    GetModeSale: Filter + 'GetModeSale',
+    GetTeamModeofSale: Filter + 'GetTeamModeofSale',
+    GetSalesParty: Filter + 'GetSalesParty',
+    GetPurchaseParty: Filter + 'GetPurchaseParty',
+    GetSalesAging: Filter + 'GetSalesAging',
+    GetDayBook: Filter + 'GetDayBook',
+    GetMetalType: Filter + 'GetMetalType',
 
     GetSalesEfficiencyCard : Card + 'GetSalesEfficiencyCard',
     GetReturnTrendCard : Card + 'GetReturnTrendCard',
@@ -44,8 +55,10 @@ const API = {
     GetSalesAgingWise : Chart + 'GetSalesAgingWise',
     GetModeOfSalesWise : Chart + 'GetModeOfSalesWise',
     GetTeamAndModeOFSalesWise : Chart + 'GetTeamAndModeOFSalesWise',
-    GetSalesmanWise : Chart + 'GetSalesmanWise'
-
+    GetSalesmanWise : Chart + 'GetSalesmanWise',
+    CommonChart : Chart + 'GetCommanChart',
+    CommonCard : Card + 'GetCardValue',
+    GetDetailCommanChart: Chart + 'GetDetailCommanChart'
 
 }
 export default API

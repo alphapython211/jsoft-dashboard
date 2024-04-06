@@ -5201,6 +5201,7 @@ select,
 .filter-top {
     background-color: #c1d1dd;
     border-radius: 10px;
+    padding: 10px;
 }
 .top-card-filter{
     padding-top: 15px;

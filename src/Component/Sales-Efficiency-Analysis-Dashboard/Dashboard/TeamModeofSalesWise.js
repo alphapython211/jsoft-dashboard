@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 
 import ReactApexChart from 'react-apexcharts';
-import { StackedBar2Options } from '../../ChartOptions/StackedBar2';
 import BlackDots from '../../Assets/image/Dots.png'
 import API from '../../Utility/API';
 import post from '../../Utility/APIHandle'
@@ -29,7 +28,7 @@ export default function TeamModeofSalesWise() {
 	const label = ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
 		'01/05/2011 GMT', '01/06/2011 GMT'
 	]
-	const option = StackedBar2Options(label)
+	const option ={}
 
 	const [postData, setPostData] = useState({
 		"strBranch": "",
@@ -68,11 +67,11 @@ export default function TeamModeofSalesWise() {
 	}, [postData])
 
 
-	function getdata() {
+	async function getdata() {
 
 		let temp1 = []
 
-		post(postData, API.GetModeOfSalesWise, 'post')
+		await post(postData, API.GetModeOfSalesWise, 'post')
 			.then((res) => {
 
 				for (let index = 0; index < res.data.lstResult.length; index++) {

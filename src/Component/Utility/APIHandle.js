@@ -22,7 +22,6 @@ export default async function post(inputJson, APINAME, defaultRes, methodType) {
                 }
                 else
                 {
-           
                     return res
                 }
                

@@ -7,6 +7,7 @@ import {
 
 import Navbar from './Component/Sales-Efficiency-Analysis-Dashboard/NavigationBar/Navbar';
 import Dashboard from './Component/Sales-Efficiency-Analysis-Dashboard/Dashboard/Dashboard';
+import DetailedScreen from './Component/SecondScreen/DetailedScreen';
 
 import './Component/Assets/css/bootstrap-select.min.css'
 import './Component/Assets/css/bootstrap.min.css'
@@ -14,10 +15,12 @@ import './Component/Assets/css/charts.min.css'
 import './Component/Assets/css/font-awesome-all.min.css'
 import './Component/Assets/css/reset.css'
 // import './Component/Assets/css/style.css'
-
 import './Component/Assets/css/style copy.css'
 
 import './Component/Assets/css/Custom.css'
+import './Component/Assets/css/responsive.css'
+
+
 
 
 
@@ -39,6 +42,7 @@ function App() {
 
           <Routes>
             <Route exact path='/' element={<Dashboard />}></Route>
+            <Route exact path='/graph-detail' element={<DetailedScreen />}></Route>
           </Routes>
 
 

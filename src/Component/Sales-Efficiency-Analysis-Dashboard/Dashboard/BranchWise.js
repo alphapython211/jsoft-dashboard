@@ -1,228 +1,190 @@
-import React, { useEffect, useState,useRef, useContext } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import API from '../../Utility/API';
 import post from '../../Utility/APIHandle'
-
 import ReactApexChart from 'react-apexcharts';
-
+import ApexCharts from 'react-apexcharts';
 import BlackDots from '../../Assets/image/Dots.png'
-
-import { radialBarOptions } from '../../ChartOptions/RadialBar';
-import { DoughnutOptions } from '../../ChartOptions/Doughnut';
+import Gradient from "javascript-color-gradient";
+import { BranchWise_donut } from "./../../ChartOptions/BranchWise_donut";
+import { BranchWise_Radial } from "./../../ChartOptions/Branchwise_Radial";
 import { render } from '@testing-library/react';
 import contex from '../../contex/Contex';
-
-
+import drop from '../../Assets/img/svg/dropdown.svg'
+import '../../Assets/css/Custom.css'
+import { useNavigate } from 'react-router-dom';
 
 
 export default function BranchWise() {
 
+	const contexData = useContext(contex)
+	const [name, setName] = useState([])
+	const [weight, setweight] = useState([])
+	let inputdata = contexData.state;
+	const navigate = useNavigate()
+	const [flag, setflag] = useState("donut")
+	const [sales, setSales] = useState([])
 
-	const contexData = useContext(contex) 
-	
-
-	const series = [76, 67, 61, 90]
-	const label = ['Vimeo', 'Messenger', 'Facebook', 'LinkedIn']
-
-	const radialOption = radialBarOptions(label)
-	const Doughnut = DoughnutOptions(label)
-
-	// const [radialOption,setRadialOption] = useState(radialBarOptions(label))
-	// const [Doughnut,SetDoughnut] = useState(DoughnutOptions(label))
-
-	// const radialOption = useRef(radialBarOptions(label))
-	// const Doughnut = useRef(DoughnutOptions(label))
-
-	const[option,setOption] = useState()
-	
-	const [branchWiseChart, setBranchWiseChart] = useState(2)
-
-	const [show,setShow] = useState(true)
-
-	const [postData, setPostData] = useState({
-        "strBranch": "",
-        "strState": "",
-        "strCity": "",
-        "strItem": "",
-        "strSubItem": "",
-        "strItemGroup": "",
-        "strItemSubitem": "",
-        "strPurchaseParty": "",
-        "strSalesParty": "",
-        "strSaleman": "",
-        "strProduct": "",
-        "strDesignCatalogue": "",
-        "strSaleAging": "",
-        "strModeofSale": "",
-        "strTeamModeofSale": "",
-        "FromDate": "",
-        "ToDate": "",
-        "strMetalType": "",
-        "strDayBook": "",
-        "PageNo": 0,
-        "PageSize": 0,
-        "Search": ""
-    })
+	const gradientArray = new Gradient().setColorGradient("#01555b", "#98c8cb").getColors()
 
 
 	useEffect(() => {
-		// if (branchWiseChart === 1) {
-			
-		// 	setOption(radialOption)
-		// 	// return(<div> <p>RadialBar</p> </div>)
-		// 	// return (<div><ReactApexChart options={option} series={series} type="radialBar" height={380} /></div>)
-			
-		// }
-		// else if (branchWiseChart === 2) { 		
-			
-		// 	setOption(Doughnut)
-		// 	// return(<div> <p>Donut </p></div>)
-		// 	// return (<div><ReactApexChart options={Doughnut} series={series} type="donut" height={380} /></div>)
-		// }
-
-	}, [branchWiseChart])
-
-	useEffect(()=>{
-
-		setPostData(contexData.state)
-
-	},[contexData.state])
-
-	useEffect(()=>{
 		getdata()
-	},[postData])
-
-	function getdata() {
-		console.log('postData in branch' , postData)
-		let temp1 = []
-
-        post(postData,API.GetBranchWise,'post')
-        .then((res)=>{
-
-            // for (let index = 0; index < res.data.lstResult.length; index++) {
-
-			// 	temp1.push({
-					  
-			// 	})
-
-			// }
-			
-        })
-    }
+	}, [inputdata])
 
 
 
+	const series = handleSeriesData()
+	const options_donut = BranchWise_donut(name)
 
+	const options_radialbar = BranchWise_Radial(name)
 
-	function handleSelectedChart(num) {
-		setBranchWiseChart(num)
-		// if (num===1){	
-		// setShow(false)
-		// }
-		// else{
-		// 	setShow(true)
-		// }	
-	}
-
-	function returnSelectedChart() {
-		if (branchWiseChart === 1) {
-			
-			
-			return (<div><ReactApexChart options={radialOption} series={series} type="radialBar" height={380} /></div>)
-			
-		}
-		else if (branchWiseChart === 2) { 		
-			
-			
-			return (<div><ReactApexChart options={Doughnut} series={series} type="donut" height={380} /></div>)
+	function handleclick(e) {
+		if (e.target.className !== 'custom-hr') {
+			setflag(e.target.id)
 		}
 	}
 
-	function handledropdownMenu(e) {
-		console.log('Branch')
-		// console.log(e)
-		// console.log(document.getElementById("myDropdownBranch").style.display)
-		document.getElementById("myDropdownBranch").style.display === "block" ? document.getElementById("myDropdownBranch").style.display = "none" : document.getElementById("myDropdownBranch").style.display = "block";
+	function setMargin() {
+		if (weight.length < 7) {
+			return 80
+		} else {
+			return 30
+		}
+	}
+
+	function handleSeriesData() {
+		let percarray = []
+		let sum = 0;
+
+		for (let i = 0; i < weight.length; i++) {
+			sum += weight[i];
+		}
+
+		for (let index = 0; index < weight.length; index++) {
+			percarray.push((weight[index] / sum) * 100)
+		}
+		return percarray
+
 	}
 
 
+	async function getdata() {
+		inputdata = { ...inputdata, ['Grouping']: 'a.BranchID,b.BranchName' }
+		// console.log("branchwise data", inputdata);
+		await post(inputdata, API.CommonChart, {}, 'post')
+			.then((res) => {
+				let name = [];
+				let weight = [];
+				let sale = [];
+				var js = {};
+				// console.log(res.data.lstResult)
+				for (let index = 0; index < res.data.lstResult.length; index++) {
+					name.push(res.data.lstResult[index]['BranchName'])
+					weight.push(res.data.lstResult[index]['FineWt'])
+
+					js = { 'product': '', 'thisYearProfit': 0 }
+					if (res.data.lstResult[index]['BranchName'] === null) {
+						js['product'] = 'null'
+					} else {
+						js['product'] = res.data.lstResult[index]['BranchName']
+					}
+					js['thisYearProfit'] = res.data.lstResult[index]['FineWt']
+
+					sale.push(js)
+				}
+				setName(name)
+				setweight(weight)
+
+				var j = []
+				for (let index = 0; index < sale.length; index++) {
+					j.push({ ...sale[index], ['color']: gradientArray[index] })
+				}
+				setSales(j)
+				// console.log("name", name)
+				// console.log("weight", weight);
+				inputdata = { ...inputdata, ['Grouping']: '' }
+			})
+	}
+
+
+
+	// function handleThousand(n) {
+	// 	localStorage.setItem("value", n)
+	// 	contexData.setcurrency(n)
+	// }
+
+	function handleonchangeCurrency() {
+		// console.log("innn")
+		document.getElementById("myDropdowniconbranch").style.display === "block" ? document.getElementById("myDropdowniconbranch").style.display = "none" : document.getElementById("myDropdowniconbranch").style.display = "block";
+	}
+
+	function handleNavigation() {
+		navigate('/graph-detail', { state: "a.BranchID,b.BranchName" })
+	}
+
+	window.onclick = function (event) {
+
+		// console.log('evennnn', event.target.className)
+		if (event.target.className !== 'dropbtn') {
+			if (document.getElementsByClassName("dropdown-contenticon")[0] !== undefined) {
+				document.getElementsByClassName("dropdown-contenticon")[0].style.display = "none";
+			}
+		}
+	}
+
+	// console.log("optionss", options)
 
 	return (
 		<div className="col-lg-4 col-md-6 col-12">
 
 			<div className="graph-card">
-
-
-				<div className='card-title-graph'>
+				<div className='card-title-graph' onClick={handleNavigation}>
 
 					<p><i class="fas fa-chart-pie">
 
 					</i> Branch Wise </p>
+					<i className="fas fa-external-link-alt"></i>
+					{/* <img src={drop} className='dropbtnicon'></img> */}
 
-
-
-					{/* <p class="geex-content__header__quickaction__link  geex-btn__customizer dots" onMouseEnter={handledropdownMenu} onMouseLeave={handledropdownMenu}  >
-						<img src={BlackDots} className='dropbtn' />
-					</p>
-					<div id="myDropdownBranch" class="dropdown-content" onMouseEnter={handledropdownMenu} onMouseLeave={handledropdownMenu}>
-						<a id='option1' onClick={() => {handleSelectedChart(1); }}>Radial Bar</a><hr class="custom-hr" />
-						<a id='option2' onClick={() => {handleSelectedChart(2); }}>Pie</a><hr class="custom-hr" />
-					</div> */}
-
-
-
-
-					<i class="fas fa-external-link-alt"></i>
 
 				</div>
-
-
-
 
 
 
 				<div className="crancy-progress-card card-contain-graph">
+					<div className='btnicons'>
+						<img src={drop} className='dropbtn' onClick={handleonchangeCurrency}></img>
 
-					{/* <h1>Hello</h1> */}
+						<div id="myDropdowniconbranch" className="dropdown-contenticon" onClick={handleclick}>
+							<a id='donut' >donut</a><hr className='custom-hr' />
+							<a id='radialBar' >radialBar</a><hr className='custom-hr' />
+							<a id='heatmap' >Heat map</a><hr className='custom-hr' />
+							{/* <a id='bubble' >Bubble</a><hr className='custom-hr' /> */}
+						</div>
 
-					{/* {()=>{return (returnSelectedChart())}} */}
+					</div>
+					{flag === 'donut' ? <ReactApexChart options={options_donut} series={series} height={380} type={flag} /> : null}
+					{flag === 'radialBar' ? <ReactApexChart options={options_radialbar} series={series} height={380} type={flag} /> : null}
+					{flag === 'heatmap' ?
+						<div>
+							<table align='center' rules='rows' border='white' style={{ border: 'white', marginTop: setMargin() }}>
+								<tr>
+									<th>Branchwise</th>
+									<th>FineWt</th>
+								</tr>
+								{sales.map((data) => {
+									return (
+										<tr >
+											<td style={{ backgroundColor: data.color, width: 250, color: 'white' }}>{data.product} </td>
+											<td style={{ backgroundColor: data.color, width: 250, color: 'white' }}>{data.thisYearProfit}</td>
+										</tr>
+									)
+								})}
 
-				{/* <returnSelectedChart/> */}
-				{returnSelectedChart()}
-				{/* {branchWiseChart === 1?<ReactApexChart options={radialOption} series={series} type="radialBar" height={380} />:<ReactApexChart options={Doughnut} series={series} type="donut" height={380} /> } */}
-					
-					
-
-					{/* { 
-					
-						(branchWiseChart === 1) && (<ReactApexChart options={radialOption} series={series} type="radialBar" height={380} />)
-						(branchWiseChart === 2) && (<ReactApexChart options={Doughnut} series={series} type="donut" height={380} />)
-					
-					} */}
-
-					 {/* {()=>{
-						if (branchWiseChart === 1) {
-
-							
-							<ReactApexChart options={radialOption} series={series} type="radialBar" height={380} />
-							
-						}
-						else if (branchWiseChart === 2) { 			
-							<ReactApexChart options={Doughnut} series={series} type="donut" height={380} />
-						}
-					 }} */}
-
-					 {/* {
-						(show===true) ? <ReactApexChart options={Doughnut} series={series} type="donut" height={380}/> : <ReactApexChart options={radialOption} series={series} type="radialBar" height={380} />
-					 } */}
-
+							</table></div> : null}
+					{/* </div> */}
+					<div id="html-dist"></div>
 				</div>
-
-
-
-
-
-
-
 			</div>
 		</div>
 	)

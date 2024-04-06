@@ -35,6 +35,7 @@ import ContexState from '../../contex/ContexState'
 
 
 export default function Dashboard() {
+    
     return (
         <div>
             <ContexState>
@@ -73,7 +74,7 @@ export default function Dashboard() {
                                 <YearWise/>
                                 <SalesAgingWise/>
                                 <ModeofSalesWise/>
-                                <TeamModeofSalesWise/>
+                                {/* <TeamModeofSalesWise/> */}
                             </div>
                         </div>
                     </div>
