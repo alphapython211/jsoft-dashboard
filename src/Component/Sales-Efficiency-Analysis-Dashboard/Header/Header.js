@@ -1080,12 +1080,14 @@ export default function Header() {
           {/* <div class="modal-dialog modal-dialog-c`entered modal-dialog-scrollable modal-xl modal-filter" id="staticBackdrop" data-bs-backdrop="static"  data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true"> */}
           <div class="modal-content">
             <Modal.Header class="modal-body-header" closeButton>
-              <div class="modal-header">
-                <h5 class="modal-title filter-modal-title" >
-                  <i class="fa-solid fa-filter"></i>&nbsp; Filter By 
-                </h5>
-                
-              </div>
+            <Modal.Header >
+											<div class="geex-customizer__header">
+												<h4 class="geex-customizer__title">Filter By</h4>
+												<div class="crancy-color2__fill filter-close-icon"  onClick={handleOnClose}>
+                        <i class="fa-solid fa-xmark"></i>
+												</div>
+											</div>
+										</Modal.Header>
             </Modal.Header>
 
             <Modal.Body class="modal-body">
